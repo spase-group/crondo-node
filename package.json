@@ -1,5 +1,5 @@
 {
-  "name": "cronrun",
+  "name": "crondo",
   "version": "0.0.1",
   "description": "Command line tool to schedule and run tasks with output written to the console, a file or emailed.",
   "main": "index.js",
@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spase-group/cronrun-node.git"
+    "url": "git+https://github.com/spase-group/crondo-node.git"
   },
   "bin": {
-    "cronrun": "src/cronrun.js"
+    "cronrun": "src/crondo.js"
   },
   "keywords": [
     "Cron",
@@ -20,9 +20,9 @@
   "author": "Todd King <tking@igpp.ucla.edu>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/spase-group/cronrun-node/issues"
+    "url": "https://github.com/spase-group/crondo-node/issues"
   },
-  "homepage": "https://github.com/spase-group/cronrun-node#readme",
+  "homepage": "https://github.com/spase-group/crondo-node#readme",
   "dependencies": {
     "cron": "^1.8.2",
     "nodemailer": "^6.7.3",
