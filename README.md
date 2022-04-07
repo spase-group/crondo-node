@@ -1,21 +1,21 @@
-# cronrun
+# crondo
 
-[![Version](https://badgen.net/npm/v/cronrun?icon=npm)](https://badgen.net/npm/v/cronrun)
-[![Build Status](https://badgen.net/github/status/spase-group/cronrun-node?icon=github)](https://badgen.net/github/status/spase-group/cronrun-node)
-[![Build Checks](https://badgen.net/github/checks/spase-group/cronrun-node?icon=github)](https://badgen.net/github/checks/spase-group/cronrun-node)
-[![Dependency Status](https://badgen.net/david/dep/spase-group/cronrun-node)](https://badgen.net/david/dev/kelektiv/node-cron)
-[![Code Coverage](https://badgen.net/codecov/c/github/spase-group/cronrun-node?icon=codecov)](https://badgen.net/codecov/c/github/spase-group/cronrun-node)
-[![Known Vulnerabilities](https://snyk.io/test/github/spase-group/cronrun-node/badge.svg)](https://snyk.io/test/github/spase-group/cronrun-node)
-[![Minified size](https://badgen.net/bundlephobia/min/cronrun)](https://badgen.net/bundlephobia/min/cronrun)
-[![Minzipped size](https://badgen.net/bundlephobia/minzip/cronrun)](https://badgen.net/bundlephobia/minzip/cronrun)
-[![monthly downloads](https://badgen.net/npm/dm/cronrun?icon=npm)](https://badgen.net/npm/dm/cron)
+[![Version](https://badgen.net/npm/v/crondo?icon=npm)](https://badgen.net/npm/v/crondo)
+[![Build Status](https://badgen.net/github/status/spase-group/crondo-node?icon=github)](https://badgen.net/github/status/spase-group/crondo-node)
+[![Build Checks](https://badgen.net/github/checks/spase-group/crondo-node?icon=github)](https://badgen.net/github/checks/spase-group/crondo-node)
+[![Dependency Status](https://badgen.net/david/dep/spase-group/crondo-node)](https://badgen.net/david/dev/kelektiv/node-cron)
+[![Code Coverage](https://badgen.net/codecov/c/github/spase-group/crondo-node?icon=codecov)](https://badgen.net/codecov/c/github/spase-group/crondo-node)
+[![Known Vulnerabilities](https://snyk.io/test/github/spase-group/crondo-node/badge.svg)](https://snyk.io/test/github/spase-group/crondo-node)
+[![Minified size](https://badgen.net/bundlephobia/min/crondo)](https://badgen.net/bundlephobia/min/crondo)
+[![Minzipped size](https://badgen.net/bundlephobia/minzip/crondo)](https://badgen.net/bundlephobia/minzip/crondo)
+[![monthly downloads](https://badgen.net/npm/dm/crondo?icon=npm)](https://badgen.net/npm/dm/cron)
 
-Cronrun is a command line tool to schedule and run tasks with the output written to the console, 
+Crondo is a command line tool to schedule and run tasks with the output written to the console, 
 a log file or emailed. The tool runs in the user space and executes tasks in the same space.
 
 # Installation
 
-    npm install cronrun
+    npm install crondo
 
 # If You Are Submitting Bugs/Issues
 
@@ -48,11 +48,11 @@ private (secret) information, but it must replicate the issue you are describing
 
 **Command**
 ```
-cronrun hello.json
+crondo hello.json
 ```
 
 There are more examples available in this repository at:
-[/examples](https://github.com/spase-group/cronrun-node/tree/master/examples)
+[/examples](https://github.com/spase-group/crondo-node/tree/master/examples)
 
 # Cron patterns:
 The value of time segemnt is specified using cron patterns. 
