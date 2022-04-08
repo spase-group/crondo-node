@@ -271,7 +271,6 @@ var main = async function(args)
          });
          */
          
-         outputWrite("Success!");
          if(options.from == null) {  // If by not set, 
            options.from = config.mailer.user;
          }
@@ -294,6 +293,7 @@ var main = async function(args)
    
    for(let i = 0; i < config.jobs.length; i++) {
       let job = config.jobs[i]
+      if(job.active !== undefined && ! job.active) { job.proc = null; continue; } // Don't create job
       if(options.verbose) { outputWrite("Defining: "); outputWrite(job); }
       job.proc = new CronJob(getSchedule(job), function() {
          const subprocess = exec(job.task, 
@@ -333,8 +333,8 @@ var main = async function(args)
    // Start each job
    if(options.verbose) { outputWrite("Starting all jobs..."); }
    for(let i = 0; i < config.jobs.length; i++) {
-      var job = config.jobs[i]
-      job.proc.start();
+      let job = config.jobs[i]
+      if(job.proc) job.proc.start();
    }    
 }
 

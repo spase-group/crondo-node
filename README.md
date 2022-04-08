@@ -44,6 +44,7 @@ is defined in a configuration file that is in JSON format. The structure of the 
    "timezone" : [string],
    "jobs" : [
       {
+         "active" : [boolean],
          "subject" : [string],
          "description" : [string],
          "mailTo" : [string],
@@ -64,9 +65,10 @@ is defined in a configuration file that is in JSON format. The structure of the 
 **Notes:**
 
   + Only "jobs" and "jobs[].task" are required. If output is only to the console or a file then "mailer" is not necessary.
+  + "description" elements are useful for providing internal documentation (not available in JSON).
   + The default for elements in "jobs[].every" is the pattern "*".
   + Only elements with non-default values are necessary in "jobs[].every".
-  + "description" elements are useful for providing internal documentation (not available in JSON).
+  + A job may be turned off by setting "job[].active" to false. By default a job is active.
   + If a "mailer" is configured, but you would like to turn it off, set "mailer.active" to false.
   + "jobs[].subject" is used as the subject line in emails.
   + the "jobs[].mailto" can have multiple recipients, each separated by a comma.
