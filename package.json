@@ -1,6 +1,6 @@
 {
   "name": "crondo",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Command line tool to schedule and run tasks with output written to the console, a file or emailed.",
   "main": "index.js",
   "scripts": {
