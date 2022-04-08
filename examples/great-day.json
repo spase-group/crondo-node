@@ -1,0 +1,23 @@
+{
+   "description" : "Great Day example. Two tasks, both done once a minute.",
+   "jobs" : [
+      {
+         "subject" : "Echo \"Hello world!\" to console",
+         "description" : "Echo to console the phrase \"Hello world!\" once a minute.",
+         "mailto" : false,
+         "every" : {
+                        "seconds": "0"
+                    },
+         "task" : "echo \"Hello World!\""
+      },
+      {
+         "subject" : "Echo \"Have a great day!\" to console",
+         "description" : "Echo to console the phrase \"Have a great day!\" once a minute.",
+         "mailto" : false,
+         "every" : {
+                        "seconds": "1"
+                    },
+         "task" : "echo \"Have a great day!\""
+      }
+   ]
+}

@@ -34,7 +34,7 @@ var options  = yargs
     
 		'v' : {
 			alias: 'verbose',
-			describe : 'show information while processing files',
+			describe : 'Show information while processing files',
 			type: 'boolean',
 			default: false
 		},
@@ -58,7 +58,7 @@ var options  = yargs
       // Write output to a file
       'o' : {
          alias: 'output',
-         describe : 'Write output to a file. Default: to standard out',
+         describe : 'Write output to a file. Default: console',
          type: 'string',
          default: null
       },
@@ -224,8 +224,7 @@ var getSchedule = function(job) {
  **/
 var main = async function(args)
 {
-
-	if (options.crontab == null && args.length == 0) {
+	if (options.config == null && args.length == 0) {
 	  yargs.showHelp();
 	  return;
 	}
@@ -233,7 +232,6 @@ var main = async function(args)
 	// Output
 	if(options.output) {
 		outputFile = fs.createWriteStream(options.output);
-		// outputWrite(0, 'datacite:');
 	}
 
   // Set contab file name. Priority is if passed as option.
@@ -248,17 +246,25 @@ var main = async function(args)
       return;
    }  
 	
-   if(config.mailer && config.mailer.active) {       
+   if(config.mailer && config.mailer.active) {      
+      if(options.verbose) {
+         outputWrite("Setting up mailer ...")   
+         outputWrite(JSON.stringify(config.mailer, null, 3));
+      }
       try {
          // Create mail transporter
+         transporter = nodemailer.createTransport(config.mailer);
+         /*
          transporter = nodemailer.createTransport({
             service: config.mailer.service,
             auth: {
-              user: config.mailer.user,
-              pass: config.mailer.password
+              user: config.mailer.auth.user,
+              pass: config.mailer.auth.password
             }
          });
-
+         */
+         
+         outputWrite("Success!");
          if(options.from == null) {  // If by not set, 
            options.from = config.mailer.user;
          }
@@ -288,20 +294,20 @@ var main = async function(args)
                if (error) {
                   if(job.mailTo) {
                      if(transporter) {
-                        sendmail(options.from, job.mailTo, "Error running: " + job.subject + ": error occurred.", error);
+                        sendmail((job.from ? job.from : options.from), job.mailTo, "Error running: " + job.subject + ": error occurred.", error);
                         return;
                      } else {
-                        if( ! transporter) outputWrite('Warning: Mail transporter not configured');
+                        if( ! transporter) outputWrite('Warning: Mail transporter not configured, but a mailTo is specified.');
                      }
                   }
                   outputWrite(error);
                } else { // It ran OK
                   if(job.mailTo) {
                      if(transporter) {
-                        sendmail(options.from, job.mailTo, "Output from: " + job.subject, stdout + stderr);
+                        sendmail((job.from ? job.from : options.from), job.mailTo, "Output from: " + job.subject, stdout + stderr);
                         return;
                      } else {
-                        outputWrite('Warning: Mail transporter not configured.');
+                        outputWrite('Warning: Mail transporter not configured, but a mailTo is specified.');
                      }
                   }
                   if(options.verbose) { if(job.subject) outputWrite(job.subject); if(job.description) outputWrite(job.description); outputWrite("--- output ---"); }

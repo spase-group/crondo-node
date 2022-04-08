@@ -1,0 +1,32 @@
+{
+   "description" : "Two tasks with out of one emailed, the other sent to console. Both tasks are done once a minute. You need to enter the correct auth information for this example to work.",
+   "mailer": {
+      "active": true,
+      "service": "gmail",
+      "auth": {
+            "user": "you@gmail.com",
+            "pass": "****************"
+         }
+   },
+   "timezone" : "America/Los_Angeles",
+   "jobs" : [
+      {
+         "subject" : "Echo \"Hello world!\" to console",
+         "description" : "Echo to console the phrase \"Hello world!\" once a minute.",
+         "mailto" : "you@gmail.com,
+         "every" : {
+                        "seconds": "0"
+                    },
+         "task" : "echo \"Hello World!\""
+      },
+      {
+         "subject" : "Echo \"Have a great day!\" to console",
+         "description" : "Echo to console the phrase \"Have a great day!\" once a minute.",
+         "mailto" : false,
+         "every" : {
+                        "seconds": "1"
+                    },
+         "task" : "echo \"Have a great day!\""
+      }
+   ]
+}
