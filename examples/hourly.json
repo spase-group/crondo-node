@@ -1,0 +1,12 @@
+{
+   "description" : "Hello World example. One task done once an hour.",
+   "jobs" : [
+      {
+         "subject" : "Echo \"Hello world!\" to console",
+         "description" : "Echo to console the phrase \"Hello world!\" once an hour.",
+         "mailto" : false,
+         "every" : "@hourly",
+         "task" : "echo \"Hello World!\""
+      }
+   ]
+}

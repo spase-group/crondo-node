@@ -1,0 +1,13 @@
+{
+   "description" : "Hello World example. One task done at midnight in the America/New_York timezone.",
+   "jobs" : [
+      {
+         "subject" : "Echo \"Hello world!\" to console",
+         "description" : "Echo to console the phrase \"Hello world!\" at midnight in the America/New_York timezone.",
+         "mailto" : false,
+         "every" : "@midnight",
+         "timezone" : "America/New_York",
+         "task" : "echo \"Hello World!\""
+      }
+   ]
+}

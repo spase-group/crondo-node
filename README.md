@@ -3,11 +3,13 @@
 [![Version](https://badgen.net/npm/v/crondo?icon=npm)](https://badgen.net/npm/v/crondo)
 [![Build Status](https://badgen.net/github/status/spase-group/crondo-node?icon=github)](https://badgen.net/github/status/spase-group/crondo-node)
 [![Build Checks](https://badgen.net/github/checks/spase-group/crondo-node?icon=github)](https://badgen.net/github/checks/spase-group/crondo-node)
-[![Dependency Status](https://badgen.net/david/dep/spase-group/crondo-node)](https://badgen.net/david/dev/kelektiv/node-cron)
+[![Dependency Status](https://badgen.net/npm/dependents/crondo)](https://badgen.net/npm/dependents/crondo)
+<!--
 [![Code Coverage](https://badgen.net/codecov/c/github/spase-group/crondo-node?icon=codecov)](https://badgen.net/codecov/c/github/spase-group/crondo-node)
 [![Known Vulnerabilities](https://snyk.io/test/github/spase-group/crondo-node/badge.svg)](https://snyk.io/test/github/spase-group/crondo-node)
 [![Minified size](https://badgen.net/bundlephobia/min/crondo)](https://badgen.net/bundlephobia/min/crondo)
 [![Minzipped size](https://badgen.net/bundlephobia/minzip/crondo)](https://badgen.net/bundlephobia/minzip/crondo)
+-->
 [![monthly downloads](https://badgen.net/npm/dm/crondo?icon=npm)](https://badgen.net/npm/dm/crondo)
 
 Crondo (/krɒn:du:/) is a command line tool to schedule and run tasks with the output written to the console, 
@@ -140,12 +142,11 @@ within the allowed ranges.
 - Months: 0-11 (Jan-Dec) also allowed (January-December)
 - Day of Week: 0-6 (Sun-Sat) also allowed (Sunday-Saturday)
 
-# Every abbreviations
+# Every Abbreviations
 
 The job[].every element supports cadence abbreviations. Instead of specifying individual time segments (i.e. seconds, minutes, hours, etc.)
 you can use one of the following tags.
 
-+------------------------+------------------------------------------------------------+
 | Abbreviation           | Description                                                |
 |------------------------|------------------------------------------------------------|
 | @yearly (or @annually) |	Run once a year at midnight of 1 January                   |
@@ -153,7 +154,6 @@ you can use one of the following tags.
 | @weekly                | Run once a week at midnight on Sunday morning              |
 | @daily (or @midnight)	 | Run once a day at midnight                                 |
 | @hourly                | Run once an hour at the beginning of the hour              |
-+------------------------+------------------------------------------------------------+
 
 For example, the previous example could be run on each hour with the following:
 
