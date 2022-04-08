@@ -208,14 +208,21 @@ var getSchedule = function(job) {
   
    var onTick = "";
    
-   if(job.every.seconds)    { onTick += job.every.seconds;    } else { onTick += "*"; }; onTick += " ";
-   if(job.every.minutes)    { onTick += job.every.minutes;    } else { onTick += "*"; }; onTick += " ";
-   if(job.every.hours)      { onTick += job.every.hours;      } else { onTick += "*"; }; onTick += " ";
-   if(job.every.dayOfMonth) { onTick += job.every.dayOfMonth; } else { onTick += "*"; }; onTick += " ";
-   if(job.every.months)     { onTick += convertMonths(job.every.months);     } else { onTick += "*"; }; onTick += " ";
-   if(job.every.dayOfWeek)  { onTick += convertDayOfWeek(job.every.dayOfWeek);  } else { onTick += "*"; }
-
-   outputWrite("onTick: " + onTick);
+   if (typeof job.every === 'string' || job.every instanceof String) {
+      if(job.every == "@yearly" || job.every == "@annually") return("0 0 0 1 1 *");
+      if(job.every == "@monthly") return("0 0 0 1 * *");
+      if(job.every == "@weekly") return("0 0 0 * * 0");
+      if(job.every == "@daily" || job.every == "@midnight") return("0 0 0 * * *");
+      if(job.every == "@hourly") return("0 0 * * * *");     
+   } else { // Build up based on what is present
+      if(job.every.seconds)    { onTick += job.every.seconds;    } else { onTick += "*"; }; onTick += " ";
+      if(job.every.minutes)    { onTick += job.every.minutes;    } else { onTick += "*"; }; onTick += " ";
+      if(job.every.hours)      { onTick += job.every.hours;      } else { onTick += "*"; }; onTick += " ";
+      if(job.every.dayOfMonth) { onTick += job.every.dayOfMonth; } else { onTick += "*"; }; onTick += " ";
+      if(job.every.months)     { onTick += convertMonths(job.every.months);     } else { onTick += "*"; }; onTick += " ";
+      if(job.every.dayOfWeek)  { onTick += convertDayOfWeek(job.every.dayOfWeek);  } else { onTick += "*"; }
+   }
+   
    return onTick;
 }
 

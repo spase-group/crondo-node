@@ -140,6 +140,38 @@ within the allowed ranges.
 - Months: 0-11 (Jan-Dec) also allowed (January-December)
 - Day of Week: 0-6 (Sun-Sat) also allowed (Sunday-Saturday)
 
+# Every abbreviations
+
+The job[].every element supports cadence abbreviations. Instead of specifying individual time segments (i.e. seconds, minutes, hours, etc.)
+you can use one of the following tags.
+
++------------------------+------------------------------------------------------------+
+| Abbreviation           | Description                                                |
+|------------------------|------------------------------------------------------------|
+| @yearly (or @annually) |	Run once a year at midnight of 1 January                   |
+| @monthly               | Run once a month at midnight of the first day of the month |
+| @weekly                | Run once a week at midnight on Sunday morning              |
+| @daily (or @midnight)	 | Run once a day at midnight                                 |
+| @hourly                | Run once an hour at the beginning of the hour              |
++------------------------+------------------------------------------------------------+
+
+For example, the previous example could be run on each hour with the following:
+
+```javascript
+{
+   "description" : "Hello World example. One task done once a minute.",
+   "jobs" : [
+      {
+         "subject" : "Echo \"Hello world!\" to console",
+         "description" : "Echo to console the phrase \"Hello world!\" once a minute.",
+         "mailto" : false,
+         "every" : "@hourly",
+         "task" : "echo \"Hello World!\""
+      }
+   ]
+}
+```
+
 # Setting Up a Mailer
 
 Crondo uses the "[nodemailer](https://nodemailer.com/)" module to deliver emails. The "mailer" options in 
