@@ -18,7 +18,7 @@ const { exec } = require('child_process');
 
 // Configure the app
 var options  = yargs
-	.version('1.0.0')
+	.version('0.0.8')
 	.usage('Command line tool to schedule and run tasks.\n\nUsage:\n\n$0 [args] crontab.json')
 	.example('$0 example.json', 'Run tasks on the schedule defined in example.json')
 	.epilog("Development funded by NASA's HPDE project at UCLA.")
@@ -166,7 +166,7 @@ var report = function(job, content, suffix) {
    let attachment = null;
    let attachments = null;
    
-   if(job.description) body = job.description;
+   if(job.description) body = replaceTokens(job.description);
    
    if(job.mailTo) {  // Send email
       if(transporter) {
@@ -365,12 +365,9 @@ var main = async function(args)
    if(options.verbose) { outputWrite("Creating jobs..."); }
    
    for(let i = 0; i < config.jobs.length; i++) {
-      let body = "";
-      let attachment = null;
       let job = config.jobs[i]
       if(job.active !== undefined && ! job.active) { job.proc = null; continue; } // Don't create job
       if(options.verbose) { outputWrite("Defining: "); outputWrite(job); }
-      if(job.description) { body = job.description; }
       job.proc = new CronJob(getSchedule(job), function() {
          const subprocess = exec(job.task, 
             (error, stdout, stderr) => {

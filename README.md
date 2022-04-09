@@ -18,7 +18,7 @@ the schedule to perform those tasks, the timzone to use and the mail transport t
 
 # Installation
 
-    npm install crondo
+    npm install -g crondo
 
 # If You Are Submitting Bugs/Issues
 
@@ -177,7 +177,7 @@ For example, the previous example could be run on each hour with the following:
 
 # Tokens
 
-The subject for emails and the attachment file names can contain tokens that are replaced when the task completes.
+The subject and descriptions for emails and the attachment file names can contain tokens that are replaced with values when the task completes.
 
 Supported tokens are:
 
