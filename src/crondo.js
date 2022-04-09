@@ -18,7 +18,7 @@ const { exec } = require('child_process');
 
 // Configure the app
 var options  = yargs
-	.version('0.0.9')
+	.version('0.1.0')
 	.usage('Command line tool to schedule and run tasks.\n\nUsage:\n\n$0 [args] crontab.json')
 	.example('$0 example.json', 'Run tasks on the schedule defined in example.json')
 	.epilog("Development funded by NASA's HPDE project at UCLA.")
@@ -197,7 +197,7 @@ var report = function(job, content, suffix) {
  * January is month number 0.
  **/
 var convertMonths = function(text) {
-   text = text.toLower();  // Normalize text 
+   text = text.toLowerCase();  // Normalize text 
    
    // Do long names first
    text = text.replace(/january/g, 0);
@@ -236,7 +236,7 @@ var convertMonths = function(text) {
  * Monday is day number 0.
  **/
 var convertDayOfWeek = function(text) {
-   text = text.toLower();  // Normalize text 
+   text = text.toLowerCase();  // Normalize text 
    
    // Do long names first
    text = text.replace(/monday/g, 0);
