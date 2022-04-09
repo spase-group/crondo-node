@@ -18,7 +18,7 @@ const { exec } = require('child_process');
 
 // Configure the app
 var options  = yargs
-	.version('0.0.8')
+	.version('0.0.9')
 	.usage('Command line tool to schedule and run tasks.\n\nUsage:\n\n$0 [args] crontab.json')
 	.example('$0 example.json', 'Run tasks on the schedule defined in example.json')
 	.epilog("Development funded by NASA's HPDE project at UCLA.")
@@ -235,7 +235,7 @@ var convertMonths = function(text) {
  * Long and short (3-letter) day names are converted to day number
  * Monday is day number 0.
  **/
-var convertMonths = function(text) {
+var convertDayOfWeek = function(text) {
    text = text.toLower();  // Normalize text 
    
    // Do long names first
