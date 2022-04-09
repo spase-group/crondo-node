@@ -1,5 +1,5 @@
 {
-   "description" : "Two tasks with out of one emailed, the other sent to console. Both tasks are done once a minute. You need to enter the correct auth information for this example to work.",
+   "description" : "Two tasks with output of one emailed, the other sent to console. Both tasks are done once a minute. You need to enter the correct auth information for this example to work.",
    "mailer": {
       "active": true,
       "service": "gmail",

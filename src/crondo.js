@@ -10,6 +10,7 @@
    version: 1.00 2022-04-04
 **/
 const fs = require('fs');
+const path = require('path');
 const yargs = require('yargs');
 const nodemailer = require('nodemailer');
 const CronJob = require('cron').CronJob;
@@ -72,6 +73,7 @@ var args = options._;	// Remaining non-hyphenated arguments
 var outputFile = null;	// None defined.
 
 var transporter = null; // Email transporter
+var timezone = "America/Los_Angeles";
 
 /**
  * Write text to the choosen output stream.
@@ -94,15 +96,15 @@ var outputEnd = function() {
 /** 
  * Send email to the designated destination
  **/
-var sendmail = function(from, to, subject, message) {
+var sendmail = function(from, to, subject, message, attachments) {
    if( ! transporter) { outputWrite("No mail transporter defined. Unable to send email."); return; }
   
    var mailOptions = {
       from: from,
       to: to,
-      subject: subject,
+      subject: replaceTokens(subject),
       text: message,
-      attachments: null
+      attachments: attachments
    };
 
    if(options.verbose) {
@@ -110,13 +112,83 @@ var sendmail = function(from, to, subject, message) {
       outputWrite(mailOptions);
    }
 
-   transporter.sendMail(mailOptions, function(error, info){
+   transporter.sendMail(mailOptions, function(error, info) {
       if (error) {
-         outputWrite(error);
+         console.error(error);
       } else {
-         outputWrite('Email sent: ' + info.response);
+         console.log('Email sent: ' + info.response);
+         // remove attachment
+         if(attachments) { // Remove files
+            for(let i = 0; i < attachments.length; i++) {
+               fs.unlinkSync(attachments[i].pathname);
+            }
+         }
       }
    });
+}
+
+/** 
+ * Replace tokens in a string.
+ **/
+var replaceTokens = function(text) {
+   const now = new Date(Date().toLocaleString("en-US", { timeZone: timezone }));
+   
+   // Create YYYY-MM-DD format
+   let datestamp = now.getFullYear()
+                  + "-" 
+                  + ("0" + (now.getMonth() + 1)).slice(-2)
+                  + "-" 
+                  + ("0" + (now.getDate())).slice(-2)
+  
+   return text.replace(/\${date}/g, datestamp);   // Replace "${date}" with current date
+}
+
+/** 
+ * Write content to a file and return name of file.
+ **/
+var createAttachment = function(pattern, content) {
+   let filename = replaceTokens(pattern);
+   try {
+      // Do we need safe gaurds about name and path??
+      fs.writeFileSync(filename, content);
+   } catch(e) {
+      console.error(e.message);
+   }
+   
+   return filename;
+}
+
+/** 
+ * Report on the results of running a task. This will write to the console, a file or send email based on job configuration.
+ **/
+var report = function(job, content, suffix) {
+   let body = "";
+   let attachment = null;
+   let attachments = null;
+   
+   if(job.description) body = job.description;
+   
+   if(job.mailTo) {  // Send email
+      if(transporter) {
+         if(job.attachAs) {   // Write content into file
+            attachment = createAttachment(job.attachAs, content);
+            attachments = [
+                 {   // stream as an attachment
+                     pathname : attachment,  // Our custom payload
+                     filename: path.basename(attachment),
+                     content: fs.createReadStream(attachment)
+                 }
+           ]
+         } else {
+            body += content;
+         }
+         sendmail((job.from ? job.from : options.from), job.mailTo, replaceTokens(job.subject) + suffix, body, attachments);
+      } else {
+         if( ! transporter) outputWrite('Warning: Mail transporter not configured, but a mailTo is specified.');
+      }
+   } else { // Write to output (console or file)
+      outputWrite(content);
+   }
 }
 
 /** 
@@ -253,6 +325,7 @@ var main = async function(args)
       return;
    }  
 	
+   // Set-up 
    if(config.mailer && config.mailer.active) {      
       if(options.verbose) {
          outputWrite("Setting up mailer ...")   
@@ -281,7 +354,7 @@ var main = async function(args)
    }
   
    // Set defaults
-   if( ! config.timezone ) { config.timezone = "America/Los_Angeles" }
+   if( config.timezone ) { timezone = config.timezone; }
    
    if( ! config.jobs ) {
       outputWrite("Error: No jobs defined are defined. Nothing will be done.");
@@ -292,40 +365,24 @@ var main = async function(args)
    if(options.verbose) { outputWrite("Creating jobs..."); }
    
    for(let i = 0; i < config.jobs.length; i++) {
+      let body = "";
+      let attachment = null;
       let job = config.jobs[i]
       if(job.active !== undefined && ! job.active) { job.proc = null; continue; } // Don't create job
       if(options.verbose) { outputWrite("Defining: "); outputWrite(job); }
+      if(job.description) { body = job.description; }
       job.proc = new CronJob(getSchedule(job), function() {
          const subprocess = exec(job.task, 
             (error, stdout, stderr) => {
                if (error) {
-                  if(job.mailTo) {
-                     if(transporter) {
-                        sendmail((job.from ? job.from : options.from), job.mailTo, "Error running: " + job.subject + ": error occurred.", error);
-                        return;
-                     } else {
-                        if( ! transporter) outputWrite('Warning: Mail transporter not configured, but a mailTo is specified.');
-                     }
-                  }
-                  outputWrite(error);
+                  report(job, error, ": Error occurred");
                } else { // It ran OK
-                  if(job.mailTo) {
-                     if(transporter) {
-                        sendmail((job.from ? job.from : options.from), job.mailTo, "Output from: " + job.subject, stdout + stderr);
-                        return;
-                     } else {
-                        outputWrite('Warning: Mail transporter not configured, but a mailTo is specified.');
-                     }
-                  }
-                  if(options.verbose) { if(job.subject) outputWrite(job.subject); if(job.description) outputWrite(job.description); outputWrite("--- output ---"); }
-                  outputWrite(stdout);
-                  outputWrite(stderr);
-                  if(options.verbose) { outputWrite("--------------"); }
+                  report(job, stdout + stderr, "");
                }
             },
             null,
             false,
-            config.timezone
+            timezone
          );
       });
    }

@@ -48,6 +48,7 @@ is defined in a configuration file that is in JSON format. The structure of the 
          "subject" : [string],
          "description" : [string],
          "mailTo" : [string],
+         "attachAs" : [string],
          "every" : {
                         "seconds": [pattern],
                         "minutes": [pattern],
@@ -173,6 +174,17 @@ For example, the previous example could be run on each hour with the following:
    ]
 }
 ```
+
+# Tokens
+
+The subject for emails and the attachment file names can contain tokens that are replaced when the task completes.
+
+Supported tokens are:
+
+| Token           | Replaced with                          |
+|-----------------|----------------------------------------|
+| ${date}         | Current date in the defined timezone   |
+
 
 # Setting Up a Mailer
 
