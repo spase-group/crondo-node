@@ -18,7 +18,7 @@ const { exec } = require('child_process');
 
 // Configure the app
 var options  = yargs
-	.version('0.1.0')
+	.version('0.1.1')
 	.usage('Command line tool to schedule and run tasks.\n\nUsage:\n\n$0 [args] crontab.json')
 	.example('$0 example.json', 'Run tasks on the schedule defined in example.json')
 	.epilog("Development funded by NASA's HPDE project at UCLA.")
@@ -280,6 +280,21 @@ var getSchedule = function(job) {
   
    var onTick = "";
    
+   // A little fix - if time segment specified, make any unspecified more frequent segment 0.
+   if(job.every.months) {
+      if( typeof job.every.hours === 'undefined' ) job.every.hours = 0;
+      if( typeof job.every.minutes === 'undefined' ) job.every.minutes = 0;
+      if( typeof job.every.seconds === 'undefined' ) job.every.seconds = 0;
+   }
+   if(job.every.hours) {
+      if( typeof job.every.minutes === 'undefined' ) job.every.minutes = 0;
+      if( typeof job.every.seconds === 'undefined' ) job.every.seconds = 0;
+   }
+   if(job.every.minutes) {
+      if( typeof job.every.seconds === 'undefined' ) job.every.seconds = 0;
+   }
+   
+   // Now create "cron" schedule
    if (typeof job.every === 'string' || job.every instanceof String) {
       if(job.every == "@yearly" || job.every == "@annually") return("0 0 0 1 1 *");
       if(job.every == "@monthly") return("0 0 0 1 * *");
@@ -287,14 +302,15 @@ var getSchedule = function(job) {
       if(job.every == "@daily" || job.every == "@midnight") return("0 0 0 * * *");
       if(job.every == "@hourly") return("0 0 * * * *");     
    } else { // Build up based on what is present
-      if(job.every.seconds)    { onTick += job.every.seconds;    } else { onTick += "*"; }; onTick += " ";
-      if(job.every.minutes)    { onTick += job.every.minutes;    } else { onTick += "*"; }; onTick += " ";
-      if(job.every.hours)      { onTick += job.every.hours;      } else { onTick += "*"; }; onTick += " ";
-      if(job.every.dayOfMonth) { onTick += job.every.dayOfMonth; } else { onTick += "*"; }; onTick += " ";
-      if(job.every.months)     { onTick += convertMonths(job.every.months);     } else { onTick += "*"; }; onTick += " ";
-      if(job.every.dayOfWeek)  { onTick += convertDayOfWeek(job.every.dayOfWeek);  } else { onTick += "*"; }
+      if( typeof job.every.seconds === 'undefined' )    { onTick += "*"; } else { onTick += job.every.seconds;    }; onTick += " ";
+      if( typeof job.every.minutes === 'undefined' )    { onTick += "*"; } else { onTick += job.every.minutes;    }; onTick += " ";
+      if( typeof job.every.hours === 'undefined' )      { onTick += "*"; } else { onTick += job.every.hours;      }; onTick += " ";
+      if( typeof job.every.dayOfMonth === 'undefined' ) { onTick += "*"; } else { onTick += job.every.dayOfMonth; }; onTick += " ";
+      if( typeof job.every.months === 'undefined' )     { onTick += "*"; } else { onTick += convertMonths(job.every.months); }; onTick += " ";
+      if( typeof job.every.dayOfWeek === 'undefined' )  { onTick += "*"; } else { onTick += convertDayOfWeek(job.every.dayOfWeek); }
    }
    
+   if(options.verbose) console.log("onTick: " + onTick);
    return onTick;
 }
 
