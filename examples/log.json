@@ -1,0 +1,25 @@
+{
+   "description" : "Task with output emailed as an attachment. Attachment and subject line has current date embedded. Task is done once a minute. You need to enter the correct auth information for this example to work.",
+   "mailer": {
+      "active": true,
+      "service": "gmail",
+      "auth": {
+            "user": "you@gmail.com",
+            "pass": "****************"
+         }
+   },
+   "timezone" : "America/Los_Angeles",
+   "jobs" : [
+      {
+         "subject" : "Echo \"Hello world!\" - ${date}",
+         "description" : "Echo to console the phrase \"Hello world!\" once a minute.",
+         "mailto" : "you@gmail.com,
+         "logAs" : "log/Hi-${date}.txt",
+         "notifyOnly" : true,
+         "every" : {
+                        "seconds": "0"
+                    },
+         "task" : "echo \"Hello World!\""
+      }
+   ]
+}

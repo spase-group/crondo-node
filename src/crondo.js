@@ -18,7 +18,7 @@ const { exec } = require('child_process');
 
 // Configure the app
 var options  = yargs
-	.version('0.1.1')
+	.version('0.1.2')
 	.usage('Command line tool to schedule and run tasks.\n\nUsage:\n\n$0 [args] crontab.json')
 	.example('$0 example.json', 'Run tasks on the schedule defined in example.json')
 	.epilog("Development funded by NASA's HPDE project at UCLA.")
@@ -129,6 +129,10 @@ var sendmail = function(from, to, subject, message, attachments) {
 
 /** 
  * Replace tokens in a string.
+ *
+ * Token        Replaced with
+ * ${date}      Current date in YYYY-MM-DD format
+ * ${time}      Current time in HHMM.SS format
  **/
 var replaceTokens = function(text) {
    const now = new Date(Date().toLocaleString("en-US", { timeZone: timezone }));
@@ -140,7 +144,12 @@ var replaceTokens = function(text) {
                   + "-" 
                   + ("0" + (now.getDate())).slice(-2)
   
-   return text.replace(/\${date}/g, datestamp);   // Replace "${date}" with current date
+   let timestamp = ("0" + (now.getHours() + 1)).slice(-2)
+                  + ("0" + (now.getMinutes() + 1)).slice(-2)
+                  + "." 
+                  + ("0" + (now.getSeconds())).slice(-2)
+  
+   return text.replace(/\${date}/g, datestamp).replace(/\${time}/g, timestamp);   // Replace "${date}" with current date
 }
 
 /** 
@@ -168,19 +177,25 @@ var report = function(job, content, suffix) {
    
    if(job.description) body = replaceTokens(job.description);
    
+   if(job.logAs) {   // Write content into file
+      attachment = createAttachment(job.logAs, content);
+   }
+   
    if(job.mailTo) {  // Send email
       if(transporter) {
-         if(job.attachAs) {   // Write content into file
-            attachment = createAttachment(job.attachAs, content);
-            attachments = [
-                 {   // stream as an attachment
-                     pathname : attachment,  // Our custom payload
-                     filename: path.basename(attachment),
-                     content: fs.createReadStream(attachment)
-                 }
-           ]
-         } else {
-            body += content;
+         if( ! job.notifyOnly) { // Attach or include output
+            if(job.attachAs) {   // Write content into file
+               attachment = createAttachment(job.attachAs, content);
+               attachments = [
+                    {   // stream as an attachment
+                        pathname : attachment,  // Our custom payload
+                        filename: path.basename(attachment),
+                        content: fs.createReadStream(attachment)
+                    }
+              ]
+            } else {
+               body += content;
+            }            
          }
          sendmail((job.from ? job.from : options.from), job.mailTo, replaceTokens(job.subject) + suffix, body, attachments);
       } else {

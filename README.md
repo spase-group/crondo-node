@@ -48,6 +48,8 @@ is defined in a configuration file that is in JSON format. The structure of the 
          "subject" : [string],
          "description" : [string],
          "mailTo" : [string],
+         "logAs" : [string],
+         "notifyOnly" : [boolean],
          "attachAs" : [string],
          "every" : {
                         "seconds": [pattern],
@@ -75,6 +77,8 @@ is defined in a configuration file that is in JSON format. The structure of the 
   + the "jobs[].mailto" can have multiple recipients, each separated by a comma.
   + "timezone" can be any timezone name from the [tz list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
   + The schedule for running the task is relative to the specified timezone. 
+  + if "job[].notifyOnly" is true only the description is emailed, output from task is not sent.
+  + "logAs" will write the output of the task in the specified file. Patterns in the file name are replace on each run of the task.
   + The default timezone is "America/Los_Angeles".
 
 
@@ -181,10 +185,12 @@ The subject and descriptions for emails and the attachment file names can contai
 
 Supported tokens are:
 
-| Token           | Replaced with                          |
-|-----------------|----------------------------------------|
-| ${date}         | Current date in the defined timezone   |
+| Token           | Replaced with                                             |
+|-----------------|-----------------------------------------------------------|
+| ${date}         | Current date in the defined timezone. Format YYYY-MM-DD   |
+| ${time}         | Current time in the defined timezone. Format HHMM.SS.     |
 
+Note: The time format of "HHMM.SS" is slightly non-standard to be compatible with Windows systems.
 
 # Setting Up a Mailer
 
