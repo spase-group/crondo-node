@@ -18,7 +18,7 @@ const { exec } = require('child_process');
 
 // Configure the app
 var options  = yargs
-	.version('0.1.2')
+	.version('0.1.3')
 	.usage('Command line tool to schedule and run tasks.\n\nUsage:\n\n$0 [args] crontab.json')
 	.example('$0 example.json', 'Run tasks on the schedule defined in example.json')
 	.epilog("Development funded by NASA's HPDE project at UCLA.")
@@ -73,7 +73,7 @@ var args = options._;	// Remaining non-hyphenated arguments
 var outputFile = null;	// None defined.
 
 var transporter = null; // Email transporter
-var timezone = "America/Los_Angeles";
+var timezone = null; // "America/Los_Angeles";
 
 /**
  * Write text to the choosen output stream.
@@ -296,21 +296,21 @@ var getSchedule = function(job) {
    var onTick = "";
    
    // A little fix - if time segment specified, make any unspecified more frequent segment 0.
-   if(job.every.months) {
+   if( typeof job.every.months !== 'undefined' && job.every.months !== null ) { // Defined
       if( typeof job.every.hours === 'undefined' ) job.every.hours = 0;
       if( typeof job.every.minutes === 'undefined' ) job.every.minutes = 0;
       if( typeof job.every.seconds === 'undefined' ) job.every.seconds = 0;
    }
-   if(job.every.hours) {
+   if( typeof job.every.hours !== 'undefined' && job.every.hours !== null ) { // Defined
       if( typeof job.every.minutes === 'undefined' ) job.every.minutes = 0;
       if( typeof job.every.seconds === 'undefined' ) job.every.seconds = 0;
    }
-   if(job.every.minutes) {
+   if( typeof job.every.minutes !== 'undefined' && job.every.minutes !== null ) { // Defined
       if( typeof job.every.seconds === 'undefined' ) job.every.seconds = 0;
    }
    
    // Now create "cron" schedule
-   if (typeof job.every === 'string' || job.every instanceof String) {
+   if (typeof job.every === 'string' || job.every instanceof String) {  // If a token
       if(job.every == "@yearly" || job.every == "@annually") return("0 0 0 1 1 *");
       if(job.every == "@monthly") return("0 0 0 1 * *");
       if(job.every == "@weekly") return("0 0 0 * * 0");
@@ -327,6 +327,19 @@ var getSchedule = function(job) {
    
    if(options.verbose) console.log("onTick: " + onTick);
    return onTick;
+}
+
+/**
+ * Show the job queue
+ **/
+var showQueue = function(jobs) {
+   if( ! jobs ) return;
+   for(let i = 0; i < jobs.length; i++) {
+      let job = jobs[i];
+      console.log(job.subject);
+      console.log(job.proc.lastDate());
+      console.log(job.proc.nextDate());
+   }
 }
 
 /**
