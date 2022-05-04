@@ -18,7 +18,7 @@ const { exec } = require('child_process');
 
 // Configure the app
 var options  = yargs
-	.version('0.1.3')
+	.version('0.1.4')
 	.usage('Command line tool to schedule and run tasks.\n\nUsage:\n\n$0 [args] crontab.json')
 	.example('$0 example.json', 'Run tasks on the schedule defined in example.json')
 	.epilog("Development funded by NASA's HPDE project at UCLA.")
@@ -254,22 +254,22 @@ var convertDayOfWeek = function(text) {
    text = text.toLowerCase();  // Normalize text 
    
    // Do long names first
-   text = text.replace(/monday/g, 0);
-   text = text.replace(/tuesday/g, 1);
-   text = text.replace(/wednesday/g, 2);
-   text = text.replace(/thursday/g, 3);
-   text = text.replace(/friday/g, 4);
-   text = text.replace(/saturday/g, 5);
-   text = text.replace(/sunday/g, 6);
-
+   text = text.replace(/sunday/g, 0);
+   text = text.replace(/monday/g, 1);
+   text = text.replace(/tuesday/g, 2);
+   text = text.replace(/wednesday/g, 3);
+   text = text.replace(/thursday/g, 4);
+   text = text.replace(/friday/g, 5);
+   text = text.replace(/saturday/g, 6);
+ 
    // Now do short names first
-   text = text.replace(/mon/g, 0);
-   text = text.replace(/tue/g, 1);
-   text = text.replace(/wed/g, 2);
-   text = text.replace(/thu/g, 3);
-   text = text.replace(/fri/g, 4);
-   text = text.replace(/sat/g, 5);
-   text = text.replace(/sun/g, 6);
+   text = text.replace(/sun/g, 0);
+   text = text.replace(/mon/g, 1);
+   text = text.replace(/tue/g, 2);
+   text = text.replace(/wed/g, 3);
+   text = text.replace(/thu/g, 4);
+   text = text.replace(/fri/g, 5);
+   text = text.replace(/sat/g, 6);
    
    return text;
 }
