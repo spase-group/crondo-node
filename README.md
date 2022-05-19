@@ -211,6 +211,19 @@ This means that the setting of "jobs[].from" is ignored.
 
 Gmail has a limit of 500 recipients a day. This is typically sufficient for most uses. 
 
+# Running crondo
+
+After creating a configuration file for the tasks, for examp "crontask-weekly.json" you can run the crondo scheduler with the command:
+
+     crondo -v crontask-weekly.json
+
+This will display information in the command window you used to issue the command. This approach can be used to monitor the scheduler. 
+It does require the command window to stay connected. You can run the crondo scheduler in the background in a bash shell with the command:
+
+   crondo crontask-weekly.json &> /dev/null &
+
+This will discard any output (&> /dev/null) and run the job in the background.
+
 # Contributions
 
 This is a community effort project. To all that have contributed, Thank You!
